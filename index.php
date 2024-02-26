@@ -59,6 +59,7 @@ $hotels = [
 ];
 
 
+
 ?>
 
 <!DOCTYPE html>
@@ -69,8 +70,37 @@ $hotels = [
     <title>PHP Hotels</title>
 </head>
 <body>
+    
+
+<ul>
+    <!-- ciclo per mettere a schermo la lista degli Hotel e le varie descrizioni  -->
+    <?php foreach($hotels as $element): ?>
+        
+        <li>
+            
+            <?= '<p>'. $element['name'] . '</p>'  ?>
+            
+            <?= '<p>'. $element['description'] . '</p>'  ?>
+            
+            <!-- condizione per mettere o no il parcheggio -->
+            <?php if($element['parking']){
+                echo '<p>Parking: SI</p>';
+            }else{
+                echo '<p>Parking: NO</p>';
+            };
+            
+            '<p>'. 'Parking:' . $element['parking'] . '</p>'  ?>
+             
+            <?= '<p>'. 'Voto - ' . $element['vote'] . '</p>'  ?>
+            
+            <?= '<p>'. 'Distanza dal Centro: Km'. $element['distance_to_center'] . '</p>'  ?>
+            
+        </li>
+
+    <?php  endforeach ?>
 
 
+</ul>
     
 </body>
 </html>
