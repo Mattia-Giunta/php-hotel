@@ -58,6 +58,36 @@ $hotels = [
 
 ];
 
+// copia del database
+$filterHotels = $hotels;
+
+// condizione per scegliere solo glo hotel col parcheggio
+// bonus 1
+if( isset($_GET['parcheggio']) && $_GET['parcheggio'] == '1'){
+    $hotelWithPark = [];
+
+    foreach($filterHotels as $element){
+        if($element['parking']){
+            $hotelWithPark[] = $element;
+        }
+    }
+
+    $filterHotels = $hotelWithPark;
+
+}
+
+// bonusc 2
+if(isset($_GET['vote']) && $_GET['vote'] !== ''){
+    $hotelWithPark = [];
+
+    foreach($filterHotels as $element){
+        if($element['vote'] >= $_GET['vote']){
+            $hotelWithPark[] = $element;
+        }
+    }
+
+    $filterHotels = $hotelWithPark;
+}
 
 
 ?>
@@ -67,40 +97,92 @@ $hotels = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <title>PHP Hotels</title>
 </head>
-<body>
-    
 
-<ul>
-    <!-- ciclo per mettere a schermo la lista degli Hotel e le varie descrizioni  -->
-    <?php foreach($hotels as $element): ?>
+
+<body  data-bs-theme='dark'>
+
+
+    <main class="container pt-5 ">
+
+        <h1>Hotels</h1>
+
         
-        <li>
-            
-            <?= '<p>'. $element['name'] . '</p>'  ?>
-            
-            <?= '<p>'. $element['description'] . '</p>'  ?>
-            
-            <!-- condizione per mettere o no il parcheggio -->
-            <?php if($element['parking']){
-                echo '<p>Parking: SI</p>';
-            }else{
-                echo '<p>Parking: NO</p>';
-            };
-            
-            '<p>'. 'Parking:' . $element['parking'] . '</p>'  ?>
-             
-            <?= '<p>'. 'Voto - ' . $element['vote'] . '</p>'  ?>
-            
-            <?= '<p>'. 'Distanza dal Centro: Km'. $element['distance_to_center'] . '</p>'  ?>
-            
-        </li>
+        <form class="mb-5" action="index.php" method="get">
 
-    <?php  endforeach ?>
+            <div class="row py-4 ">
+
+                <div class="col-6">
+
+                    <label for="parcheggio" class="form-label">Parcheggio</label>
+
+                    <select name="parcheggio" id="parcheggio">
+                        <option value="">--scegli--</option>
+                        <option value="1">con parcheggio</option>
+                    </select>
+
+                    
+                </div>
+                <div class="col-6">
+
+                    <div>  
+                        <label class="form-label" for="vote">Voto</label>
+                        <input type="number" min="0" max="5" name="vote" id="vote">
+                    </div>
+
+                </div>
+                
+
+            </div>
+
+            <button class="btn btn-primary ">Invia</button>
+            
+        </form>
+
+        <div class="d-flex">
+
+            <?php foreach($filterHotels as $element): ?>
+            <div class="card" style="width: 18rem;">
+
+                <img src="./img/hotel.jpg" class="card-img-top" alt="...">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        <?= $element['name'] ?>
+                    </h5>
+
+                    <p class="card-text">
+                        <?= $element['description'] ?>
+                    </p>
+
+                    <p class="card-text">
+                        <?= ($element['parking']) ? 'SI' : 'NO'  ?>
+                    </p>
+
+                    <p class="card-text">
+                        <?=  $element['vote']  ?>
+                    </p>
+
+                    <p class="card-text">
+                    <?=  $element['distance_to_center'] .'km'  ?>
+                    </p>
+
+                </div>
+
+            </div>
+            <?php  endforeach ?>
+
+        </div>
 
 
-</ul>
-    
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
